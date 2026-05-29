@@ -1,5 +1,5 @@
 # Data files
-data/
+/data/
 *.npy
 *.h5
 *.zip
@@ -18,5 +18,3 @@ __pycache__/
 
 # macOS
 .DS_Store
-test*.jpg
-test*.jpg
