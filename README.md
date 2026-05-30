@@ -1,6 +1,6 @@
-#  Astronomical Image Classifier
+# 🔭 Astronomical Image Classifier
 
-A deep learning project that classifies astronomical images into 7 broad categories, with sub-classifiers for planetary objects and nebula types.
+A deep learning project that classifies astronomical images into 7 broad categories, with sub-classifiers for planetary objects and nebula types, and an LLM-powered description engine.
 
 ## Demo
 
@@ -8,6 +8,8 @@ Upload any astronomical image and get:
 - **Main classification** (galaxy type, nebula, planet, star cluster)
 - **Sub-classification** for planets (Saturn, Jupiter, Mars, etc.) and nebulae (Emission, Planetary, Supernova Remnant, etc.)
 - **Grad-CAM visualization** showing what the model focused on
+- **AI-generated description** powered by Google Gemini
+- **Learn More** button linking to NASA/Wikipedia/ESA
 
 ![Inference Example](outputs/gradcam/gradcam_test.png)
 
@@ -24,7 +26,26 @@ Upload any astronomical image and get:
 - **Backbone:** EfficientNet-B0 pretrained on ImageNet
 - **Training:** 2-phase (frozen backbone → full fine-tuning)
 - **Explainability:** Grad-CAM on last convolutional layer
+- **Description engine:** Google Gemini 2.5 Flash-Lite via google-genai
 - **Framework:** PyTorch + Streamlit
+
+## How It Works
+
+```
+Upload image
+     ↓
+EfficientNet-B0 (7-class main classifier)
+     ↓
+┌─────────────────────────────────────┐
+│ Nebula → Nebula sub-classifier      │ → 5 nebula types
+│ Planetary → Planet sub-classifier   │ → 10 planets/moons
+│ Galaxy/Star Cluster → direct result │
+└─────────────────────────────────────┘
+     ↓
+Grad-CAM heatmap overlay
+     ↓
+Gemini LLM generates description + Learn More link
+```
 
 ## Dataset
 
@@ -57,20 +78,22 @@ Dark Nebula, Emission Nebula, Planetary Nebula, Reflection Nebula, Supernova Rem
 ```
 astro_classifier/
 ├── app/
-│   └── app.py              # Streamlit web app
+│   └── app.py                  # Streamlit web app
 ├── notebooks/
-│   ├── 01_eda.ipynb        # EDA, training, evaluation
+│   ├── 01_eda.ipynb            # EDA, training, evaluation
 │   └── 02_SubClassifier.ipynb  # Sub-classifier training
 ├── src/
 │   ├── data/
-│   │   └── dataset.py      # Dataset pipeline
+│   │   └── dataset.py          # Dataset pipeline
 │   ├── models/
-│   │   ├── model.py        # EfficientNet-B0 builder
-│   │   └── trainer.py      # Training loop
-│   └── train.py            # Main training script
-└── outputs/
-    ├── figures/            # Confusion matrices, samples
-    └── gradcam/            # Grad-CAM visualizations
+│   │   ├── model.py            # EfficientNet-B0 builder
+│   │   └── trainer.py          # Training loop
+│   └── train.py                # Main training script
+├── outputs/
+│   ├── figures/                # Confusion matrices, samples
+│   └── gradcam/                # Grad-CAM visualizations
+├── .env                        # API keys (not committed)
+└── requirements.txt
 ```
 
 ## Setup
@@ -85,8 +108,18 @@ python3 -m venv .venv
 source .venv/bin/activate
 
 # Install dependencies
-pip install torch torchvision streamlit scikit-learn matplotlib pillow numpy h5py
+pip install -r requirements.txt
 ```
+
+## Environment Variables
+
+Create a `.env` file in the project root:
+
+```
+GEMINI_API_KEY=your_gemini_api_key_here
+```
+
+Get a free Gemini API key at [aistudio.google.com](https://aistudio.google.com) (no credit card required ;))
 
 ## Running the App
 
@@ -114,10 +147,12 @@ python3 src/train.py
 - PyTorch 2.x + torchvision
 - EfficientNet-B0
 - Streamlit
+- Google Gemini 2.5 Flash-Lite (google-genai)
 - scikit-learn
 - Grad-CAM (custom implementation)
+- python-dotenv
 
 ## Author
 
-**Rishi Kumar** , IIT Gandhinagar  
+**Rishi Kumar** : IIT Gandhinagar  
 GitHub: [@Rishiii57](https://github.com/Rishiii57)
