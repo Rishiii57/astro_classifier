@@ -9,6 +9,42 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import io
 import os
+from google import genai
+from dotenv import load_dotenv
+
+load_dotenv()
+api_key = os.getenv("GEMINI_API_KEY")
+
+def get_astronomy_description(main_class, sub_class, confidence, api_key):
+    client = genai.Client(api_key=api_key)
+    
+    if sub_class:
+        classification = f"{sub_class} ({main_class})"
+    else:
+        classification = main_class
+    
+    prompt = f"""You are an astronomy expert. The user uploaded an image that was classified as: {classification} ({confidence:.1f}% confidence).
+
+Give a 5-6 sentence engaging description suitable for a general audience. Include one interesting fact. Do not mention the confidence score or classification label in the description.
+
+At the end, on a new line, provide exactly one relevant URL from either NASA (nasa.gov), Wikipedia (wikipedia.org), or ESA (esa.int) where the user can learn more. Format it exactly like this:
+Learn More : <url>"""
+
+    response = client.models.generate_content(
+        model="gemini-2.5-flash-lite",
+        contents=prompt
+    )
+    
+    text = response.text
+    description = text
+    learn_more_url = None
+    
+    if "Learn More :" in text:
+        parts = text.split("Learn More :")
+        description = parts[0].strip()
+        learn_more_url = parts[1].strip()
+    
+    return description, learn_more_url
 
 st.set_page_config(
     page_title="Astronomical Image Classifier",
@@ -173,6 +209,7 @@ def predict(img_pil, main_model, planet_model, nebula_model, device):
         'sub_top3': sub_top3,
         'sub_classes': sub_classes if sub_pred else None,
     }
+    
 
 st.title("Astronomical Image Classifier")
 st.markdown("Upload an image of a galaxy, nebula, planet, or star cluster to classify it.")
@@ -223,7 +260,7 @@ if uploaded_file:
         results = predict(img, main_model, planet_model, nebula_model, device)
 
     with col2:
-        st.subheader("Grad-CAM — What the model sees")
+        st.subheader("Grad-CAM Overlay")
         st.image(results['overlay'], use_container_width=True)
 
     st.divider()
@@ -264,3 +301,23 @@ if uploaded_file:
         bar_val = prob
         st.markdown(f"**{MAIN_CLASSES[idx]}** — {prob*100:.1f}%")
         st.progress(bar_val)
+
+    
+
+    if api_key:
+        with st.spinner("Generating description..."):
+            description, learn_more_url = get_astronomy_description(
+                results['pred_class'],
+                results['sub_pred'],
+                results['confidence'] * 100,
+                api_key
+            )
+        
+        st.divider()
+        st.subheader("About this object : ")
+        st.write(description)
+        
+        if learn_more_url:
+            st.link_button("Learn More →", learn_more_url)
+    else:
+        st.sidebar.info("Add a Gemini API key to get AI descriptions")
