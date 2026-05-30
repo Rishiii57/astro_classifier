@@ -96,7 +96,7 @@ astro_classifier/
 └── requirements.txt
 ```
 
-## Setup
+## Setup Locally
 
 ```bash
 # Clone the repo
