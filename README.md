@@ -1,4 +1,4 @@
-# 🔭 Astronomical Image Classifier
+#  Astronomical Image Classifier
 
 A deep learning project that classifies astronomical images into 7 broad categories, with sub-classifiers for planetary objects and nebula types, and an LLM-powered description engine.
 
