@@ -31,7 +31,7 @@ At the end, on a new line, provide exactly one relevant URL from either NASA (na
 Learn More : <url>"""
 
     response = client.models.generate_content(
-        model="gemini-2.5-flash-lite",
+        model="gemini-2.5-flash",
         contents=prompt
     )
     
@@ -238,7 +238,6 @@ with st.sidebar:
     **Accuracy:** 93.25% (main model)
     """)
     st.divider()
-    st.markdown("Built with PyTorch + Streamlit")
 
 # Main area
 uploaded_file = st.file_uploader(
