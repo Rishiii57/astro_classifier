@@ -7,4 +7,4 @@ Pillow
 numpy
 scikit-learn
 matplotlib
-EOFhuggingface_hub
+huggingface_hub
