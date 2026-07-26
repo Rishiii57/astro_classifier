@@ -75,7 +75,6 @@ LEARN_MORE_URL: <url>"""
 
         return description, learn_more_url
     except Exception as e:
-        st.write(f"DEBUG ERROR: {str(e)}")
         return None, None
 
 
