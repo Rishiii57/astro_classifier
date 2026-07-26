@@ -8,3 +8,4 @@ numpy
 scikit-learn
 matplotlib
 huggingface_hub
+groq
