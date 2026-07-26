@@ -55,7 +55,7 @@ def get_astronomy_description(main_class, sub_class, confidence, api_key):
 
 Give a 5-6 sentence engaging description suitable for a general audience. Include one interesting fact. Do not mention the confidence score or classification label in the description.
 
-At the end, on a new line, provide exactly one relevant URL from Wikipedia (wikipedia.org) (first try this only), or ESA (esa.int) where the user can learn more. Format it exactly like this:
+At the end, on a new line, provide exactly one relevant URL from Wikipedia (wikipedia.org) ,where the user can learn more. Format it exactly like this:
 LEARN_MORE_URL: <url>"""
 
         response = client.chat.completions.create(
