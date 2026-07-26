@@ -8,6 +8,8 @@ A deep learning project that classifies astronomical images into 7 broad categor
 
 ## Demo
 
+[YouTube : Astronomical Image Classifier Live Demo](https://www.youtube.com/watch?v=iJ-GqAHppoM)
+
 Upload any astronomical image and get:
 - **Main classification** (galaxy type, nebula, planet, star cluster)
 - **Sub-classification** for planets (Saturn, Jupiter, Mars, etc.) and nebulae (Emission, Planetary, Supernova Remnant, etc.)
