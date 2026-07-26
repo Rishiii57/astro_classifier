@@ -57,7 +57,7 @@ At the end, on a new line, provide exactly one relevant URL from either NASA (na
 Learn More : <url>"""
 
     response = client.models.generate_content(
-        model="gemini-2.0-flash",
+        model="gemini-2.0-flash-lite",
         contents=prompt
     )
     
