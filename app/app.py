@@ -37,40 +37,46 @@ def download_weights():
 download_weights()
 
 load_dotenv()
-api_key = os.getenv("GEMINI_API_KEY")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 
+from groq import Groq
 
 def get_astronomy_description(main_class, sub_class, confidence, api_key):
-    client = genai.Client(api_key=api_key)
-    
-    if sub_class:
-        classification = f"{sub_class} ({main_class})"
-    else:
-        classification = main_class
-    
-    prompt = f"""You are an astronomy expert. The user uploaded an image that was classified as: {classification} ({confidence:.1f}% confidence).
+    try:
+        client = Groq(api_key=api_key)
+        
+        if sub_class:
+            classification = f"{sub_class} ({main_class})"
+        else:
+            classification = main_class
+
+        prompt = f"""You are an astronomy expert. The user uploaded an image that was classified as: {classification} ({confidence:.1f}% confidence).
 
 Give a 5-6 sentence engaging description suitable for a general audience. Include one interesting fact. Do not mention the confidence score or classification label in the description.
 
 At the end, on a new line, provide exactly one relevant URL from either NASA (nasa.gov), Wikipedia (wikipedia.org), or ESA (esa.int) where the user can learn more. Format it exactly like this:
-Learn More : <url>"""
+LEARN_MORE_URL: <url>"""
 
-    response = client.models.generate_content(
-        model="gemini-2.0-flash-lite",
-        contents=prompt
-    )
-    
-    text = response.text
-    description = text
-    learn_more_url = None
-    
-    if "Learn More :" in text:
-        parts = text.split("Learn More :")
-        description = parts[0].strip()
-        learn_more_url = parts[1].strip()
-    
-    return description, learn_more_url
+        response = client.chat.completions.create(
+            model="llama3-8b-8192",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=500,
+        )
+
+        text = response.choices[0].message.content
+        description = text
+        learn_more_url = None
+
+        if "LEARN_MORE_URL:" in text:
+            parts = text.split("LEARN_MORE_URL:")
+            description = parts[0].strip()
+            learn_more_url = parts[1].strip()
+
+        return description, learn_more_url
+    except Exception as e:
+        return None, None
+
 
 st.set_page_config(
     page_title="Astronomical Image Classifier",
@@ -329,20 +335,19 @@ if uploaded_file:
 
     
 
-    if api_key:
+    if GROQ_API_KEY:
         with st.spinner("Generating description..."):
             description, learn_more_url = get_astronomy_description(
                 results['pred_class'],
                 results['sub_pred'],
                 results['confidence'] * 100,
-                api_key
+                GROQ_API_KEY
             )
         
-        st.divider()
-        st.subheader("About this object : ")
-        st.write(description)
-        
-        if learn_more_url:
-            st.link_button("Learn More →", learn_more_url)
-    else:
-        st.sidebar.info("Add a Gemini API key to get AI descriptions")
+        if description:
+            st.divider()
+            st.subheader("About this object")
+            st.write(description)
+            
+            if learn_more_url:
+                st.link_button("Learn More", learn_more_url)
