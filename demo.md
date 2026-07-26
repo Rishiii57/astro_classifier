@@ -18,7 +18,7 @@ Upload any astronomical image — galaxy, nebula, planet, or star cluster — to
 
 Full walkthrough of the application demonstrating classification of a planet, nebula, and galaxy:
 
-[YouTube — Astronomical Image Classifier Demo](https://www.youtube.com/watch?v=iJ-GqAHppoM)
+[YouTube : Astronomical Image Classifier Live Demo](https://www.youtube.com/watch?v=iJ-GqAHppoM)
 
 ---
 
