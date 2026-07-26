@@ -59,7 +59,7 @@ At the end, on a new line, provide exactly one relevant URL from Wikipedia (wiki
 LEARN_MORE_URL: <url>"""
 
         response = client.chat.completions.create(
-            model="llama3-8b-8192",
+            model="llama-3.1-8b-instant",
             messages=[{"role": "user", "content": prompt}],
             max_tokens=500,
         )
