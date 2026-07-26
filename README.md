@@ -14,7 +14,7 @@ Upload any astronomical image and get:
 - **Main classification** (galaxy type, nebula, planet, star cluster)
 - **Sub-classification** for planets (Saturn, Jupiter, Mars, etc.) and nebulae (Emission, Planetary, Supernova Remnant, etc.)
 - **Grad-CAM visualization** showing what the model focused on
-- **AI-generated description** powered by Google Gemini
+- **AI-generated description** powered by Llama 3.1 via Groq
 - **Learn More** button linking to NASA/Wikipedia/ESA
 
 ![Inference Example](outputs/gradcam/gradcam_test.png)
@@ -32,26 +32,25 @@ Upload any astronomical image and get:
 - **Backbone:** EfficientNet-B0 pretrained on ImageNet
 - **Training:** 2-phase (frozen backbone → full fine-tuning)
 - **Explainability:** Grad-CAM on last convolutional layer
-- **Description engine:** Google Gemini 2.5 Flash-Lite via google-genai
+- **Description engine:** Llama 3.1 via Groq API
 - **Framework:** PyTorch + Streamlit
 
 ## How It Works
 
-```
 Upload image
-     ↓
+↓
 EfficientNet-B0 (7-class main classifier)
-     ↓
+↓
 ┌─────────────────────────────────────┐
-│ Nebula → Nebula sub-classifier      │ → 5 nebula types
-│ Planetary → Planet sub-classifier   │ → 10 planets/moons
+│ Nebula → Nebula sub-classifier │ → 5 nebula types
+│ Planetary → Planet sub-classifier │ → 10 planets/moons
 │ Galaxy/Star Cluster → direct result │
 └─────────────────────────────────────┘
-     ↓
+↓
 Grad-CAM heatmap overlay
-     ↓
-Gemini LLM generates description + Learn More link
-```
+↓
+Llama 3.1 (Groq) generates description + Learn More link
+
 
 ## Dataset
 
@@ -98,9 +97,14 @@ astro_classifier/
 ├── outputs/
 │   ├── figures/                # Confusion matrices, samples
 │   └── gradcam/                # Grad-CAM visualizations
+├── reports/
+│   └── evaluation_report.md   # Full evaluation report
+├── demo/
+│   └── demo.md                 # Demo links and instructions
 ├── .env                        # API keys (not committed)
 └── requirements.txt
 ```
+
 
 ## Setup Locally
 
@@ -121,11 +125,10 @@ pip install -r requirements.txt
 
 Create a `.env` file in the project root:
 
-```
-GEMINI_API_KEY=your_gemini_api_key_here
-```
+GROQ_API_KEY=your_groq_api_key_here
 
-Get a free Gemini API key at [aistudio.google.com](https://aistudio.google.com) (no credit card required ;))
+
+Get a free Groq API key at [console.groq.com](https://console.groq.com) (no credit card required)
 
 ## Running the App
 
@@ -153,7 +156,7 @@ python3 src/train.py
 - PyTorch 2.x + torchvision
 - EfficientNet-B0
 - Streamlit
-- Google Gemini 2.5 Flash-Lite (google-genai)
+- Llama 3.1 via Groq API
 - scikit-learn
 - Grad-CAM (custom implementation)
 - python-dotenv
