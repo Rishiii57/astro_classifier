@@ -12,8 +12,34 @@ import os
 from google import genai
 from dotenv import load_dotenv
 
+from huggingface_hub import hf_hub_download
+import os
+
+HF_REPO = "Rishii57/astro-classifier-weights"
+CHECKPOINT_DIR = "outputs/checkpoints"
+os.makedirs(CHECKPOINT_DIR, exist_ok=True)
+
+def download_weights():
+    files = [
+        "phase2_v2_best.pth",
+        "planet_phase2_best.pth", 
+        "nebula_phase2_best.pth",
+    ]
+    for fname in files:
+        dest = os.path.join(CHECKPOINT_DIR, fname)
+        if not os.path.exists(dest):
+            hf_hub_download(
+                repo_id=HF_REPO,
+                filename=fname,
+                local_dir=CHECKPOINT_DIR,
+            )
+
+download_weights()
+
 load_dotenv()
 api_key = os.getenv("GEMINI_API_KEY")
+
+
 
 def get_astronomy_description(main_class, sub_class, confidence, api_key):
     client = genai.Client(api_key=api_key)
