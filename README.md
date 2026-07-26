@@ -2,6 +2,10 @@
 
 A deep learning project that classifies astronomical images into 7 broad categories, with sub-classifiers for planetary objects and nebula types, and an LLM-powered description engine.
 
+## Try it Live
+
+[Open App](https://astroclassifier-fvnzkywhwr6bqmpcyfvisz.streamlit.app/)
+
 ## Demo
 
 Upload any astronomical image and get:
