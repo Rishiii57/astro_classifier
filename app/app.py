@@ -59,7 +59,7 @@ At the end, on a new line, provide exactly one relevant URL from either NASA (na
 LEARN_MORE_URL: <url>"""
 
         response = client.chat.completions.create(
-            model="llama3-8b-8192",
+            model="llama-3.1-8b-instant",
             messages=[{"role": "user", "content": prompt}],
             max_tokens=500,
         )
@@ -75,6 +75,7 @@ LEARN_MORE_URL: <url>"""
 
         return description, learn_more_url
     except Exception as e:
+        st.write(f"DEBUG ERROR: {str(e)}")
         return None, None
 
 
