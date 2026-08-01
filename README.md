@@ -37,20 +37,21 @@ Upload any astronomical image and get:
 
 ## How It Works
 
+```
 Upload image
 ↓
 EfficientNet-B0 (7-class main classifier)
 ↓
 ┌─────────────────────────────────────┐
-│ Nebula → Nebula sub-classifier │ → 5 nebula types
-│ Planetary → Planet sub-classifier │ → 10 planets/moons
-│ Galaxy/Star Cluster → direct result │
+│ Nebula -> Nebula sub-classifier     │ -> 5 nebula types
+│ Planetary -> Planet sub-classifier  │ -> 10 planets/moons
+│ Galaxy/Star Cluster -> direct result│
 └─────────────────────────────────────┘
 ↓
 Grad-CAM heatmap overlay
 ↓
 Llama 3.1 (Groq) generates description + Learn More link
-
+```
 
 ## Dataset
 
